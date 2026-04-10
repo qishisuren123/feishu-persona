@@ -1,6 +1,6 @@
 """
-飞书人格基因分析机器人 - 主应用
-接收飞书事件 → 拉取聊天记录 → Claude 分析 → 返回人格基因卡片
+NMTI 牛马人格分析机器人 - 主应用
+接收飞书事件 → 拉取聊天记录 → Claude 分析 → 返回牛马基因卡片
 """
 
 import os
@@ -113,7 +113,7 @@ def handle_message(event: dict):
             if chat_type == 'p2p':
                 do_analyze(chat_id, sender_open_id, target_open_id=sender_open_id)
             else:
-                feishu.send_text(chat_id, '发送「分析我」来获取你的人格基因分析报告 🧬')
+                feishu.send_text(chat_id, '发送「分析我」来测测你是哪种牛马 🐂')
 
     except Exception as e:
         logger.error(f"Error handling message: {e}", exc_info=True)
@@ -138,7 +138,7 @@ def do_analyze(chat_id: str, requester_id: str, target_open_id: str):
     """执行人格分析"""
     try:
         # 1. 发送「正在分析」提示
-        feishu.send_text(chat_id, '🧬 正在解析你的人格基因，请稍等...\n（正在读取最近的聊天记录并分析）')
+        feishu.send_text(chat_id, '🐂 NMTI 牛马基因解码中，请稍等...\n（正在读取最近的聊天记录，看看你是哪种牛马）')
 
         # 2. 拉取目标用户在该会话中的消息
         messages = feishu.fetch_user_messages(chat_id, target_open_id, limit=200)
@@ -179,10 +179,10 @@ def send_help(chat_id: str):
 
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({'status': 'ok', 'service': 'feishu-persona-bot'})
+    return jsonify({'status': 'ok', 'service': 'nmti-bot'})
 
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 9000))
-    logger.info(f"Starting Feishu Persona Bot on port {port}")
+    logger.info(f"Starting NMTI Bot on port {port}")
     app.run(host='0.0.0.0', port=port, debug=os.environ.get('DEBUG', 'false').lower() == 'true')
